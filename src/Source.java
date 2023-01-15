@@ -10,7 +10,8 @@ import javax.swing.JPanel;
  * and open the template in the editor.
  */
 /**
- * Hallo Test: Wir werden es nicht schaffen!
+ * Hallo Test
+ * 
  */
 public class Source {
 

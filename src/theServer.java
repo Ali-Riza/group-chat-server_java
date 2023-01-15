@@ -8,20 +8,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author acer
+
+ * Das ist ein Beispiel
  */
 public class theServer extends javax.swing.JFrame {
 
 	Source OOP = new Source();
 	ArrayList clientOutputStreams;
 	ArrayList<String> users;
-	int hallo = 78484848;
 
 	public class ClientHandler implements Runnable {
 
