@@ -1,19 +1,10 @@
-
 import java.awt.Color;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+// Hallo
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author acer
- */
 public class theClient extends javax.swing.JFrame {
 
     Source OOP = new Source();
