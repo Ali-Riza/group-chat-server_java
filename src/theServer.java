@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /*
-
- * Das ist ein Beispiel
+ *  Ali
  */
 public class theServer extends javax.swing.JFrame {
 
