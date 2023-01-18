@@ -18,13 +18,13 @@ public class Server {
 
 	public void serverLoop() throws IOException {
 
-		ServerSocket Ss = new ServerSocket(8002);
+		ServerSocket serverSocket = new ServerSocket(8002);
 		System.out.println("Server gestartet");
 		;
 		while (true) {
 			System.out.println("Warte auf Client");
 			try {
-				Socket client = Ss.accept();
+				Socket client = serverSocket.accept();
 				System.out.println("Client empfangen");
 				Thread t = new Thread(() -> handClient(client));
 				t.start();
