@@ -41,10 +41,10 @@ public class Client {
 
 				while (socket.isConnected()) {
 					try {
-						msgFromGroupChat = bufferedReader.readLine();
+						msgFromGroupChat = socket.getInBR().readLine();
 						System.out.println(msgFromGroupChat);
 					} catch (IOException e) {
-						closeEveryThing(socket, bufferedReader, bufferedWriter);
+						closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
 					}
 
 				}
@@ -54,11 +54,11 @@ public class Client {
 
 	public void closeEveryThing(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
 		try {
-			if (bufferedReader != null) {
-				bufferedReader.close();
+			if (socket.getInBR() != null) {
+				socket.getInBR().close();
 			}
-			if (bufferedWriter != null) {
-				bufferedWriter.close();
+			if (socket.getOutBR() != null) {
+				socket.getOutBR().close();
 			}
 			if (socket != null) {
 				socket.close();
