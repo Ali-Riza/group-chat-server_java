@@ -1,75 +1,65 @@
 package GroupChat;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable{
 	
-	public static ArrayList<ClientHandler> ClientHandlers = new ArrayList<>();
+	private ArrayList<ClientHandler> ClientHandler = new ArrayList<>();
 	private Socket socket;
-	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
 	private String clientUserName;
 	
 	public ClientHandler(Socket socket) {
 		try {
 			this.socket = socket;
-			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.clientUserName = bufferedReader.readLine();
-			ClientHandlers.add(this);
-			broadcastMessage("SERVER: "+ clientUserName + " has entred the chat!");
+			this.clientUserName = socket.getInBR().readLine();
+			ClientHandler.add(this);
+			broadcastMessage("SERVER: "+ clientUserName + " hat den Gruppenchat beigetreten");
 		} catch (IOException e) {
-			closeEveryThing(socket, bufferedReader, bufferedWriter);
+			closeEveryThing(socket);
 		}
 	}
 
-	@Override
 	public void run() {
 		String messageFromClient;
 		while(socket.isConnected()) {
 			try {
-				messageFromClient = bufferedReader.readLine();
+				messageFromClient = socket.getInBR().readLine();
 				broadcastMessage(messageFromClient);
 			} catch (IOException e) {
-				closeEveryThing(socket, bufferedReader, bufferedWriter);
+				closeEveryThing(socket);
 				break;
 			}
 		}
 	}
 	
 	public void broadcastMessage(String messageToSend) {
-		for (ClientHandler clientHandler : ClientHandlers) {
+		for (ClientHandler clientHandler : ClientHandler) {
 			try {
 				if (!clientHandler.clientUserName.equals(clientUserName)) {
-					clientHandler.bufferedWriter.write(messageToSend);
-					clientHandler.bufferedWriter.newLine();
-					clientHandler.bufferedWriter.flush();
+					clientHandler.socket.getOutBR().write(messageToSend);
+					clientHandler.socket.getOutBR().newLine();
+					clientHandler.socket.getOutBR().flush();
 				}
 			} catch (IOException e) {
-				closeEveryThing(socket, bufferedReader, bufferedWriter);
+				closeEveryThing(socket);
 			}
 		}
 		
 	}
 	
 	public void removeClientHandler() {
-		ClientHandlers.remove(this);
-		broadcastMessage("Server: " + clientUserName + "has left the chat");
-		
+		ClientHandler.remove(this);
+		broadcastMessage("Server: " + clientUserName + " hat den Gruppenchat verlassen");
 	}
 	
-	public void closeEveryThing(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
+	public void closeEveryThing(Socket socket) {
 		try {
-			if (bufferedReader != null ) {
-				bufferedReader.close();
+			if (socket.getInBR() != null ) {
+				socket.getInBR().close();
 			}
-			if (bufferedWriter != null ) {
-				bufferedWriter.close();
+			if (socket.getOutBR() != null ) {
+				socket.getOutBR().close();
 			}
 			if (socket != null) {
 				socket.close();
@@ -78,6 +68,4 @@ public class ClientHandler implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
-
 }
