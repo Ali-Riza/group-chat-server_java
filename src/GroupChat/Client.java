@@ -3,7 +3,6 @@ package GroupChat;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
@@ -12,29 +11,25 @@ public class Client {
 	private String userName;
 
 	public Client(Socket socket, String userName) {
-		try {
-			this.socket = socket;
-			this.userName = userName;
-		} catch (IOException e) {
-			closeEveryThing(socket, socket.getInBR(), bufferedWriter);
-		}
+		this.socket = socket;
+		this.userName = userName;
 	}
 
 	public void sendMessage() {
 		try {
-			bufferedWriter.write(userName);
-			bufferedWriter.newLine();
-			bufferedWriter.flush();
+			socket.getOutBR().write(userName);
+			socket.getOutBR().newLine();
+			socket.getOutBR().flush();
 
 			Scanner scanner = new Scanner(System.in);
 			while (socket.isConnected()) {
 				String messageToSend = scanner.nextLine();
-				bufferedWriter.write(userName + ": " + messageToSend);
-				bufferedWriter.newLine();
-				bufferedWriter.flush();
+				socket.getOutBR().write(userName + ": " + messageToSend);
+				socket.getOutBR().newLine();
+				socket.getOutBR().flush();
 			}
 		} catch (IOException e) {
-			closeEveryThing(socket, bufferedReader, bufferedWriter);
+			closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
 		}
 	}
 
