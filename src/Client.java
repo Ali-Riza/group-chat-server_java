@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.net.Socket;
+import java.io.PrintStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,19 +11,23 @@ public class Client {
 	private int port;
 	private ArrayList<String> nachrichten = new ArrayList<String>();
 	private String userName;
+	private Socket clientSocket;
 	
-	public Client(int port, String userName) {
+	public Client(int port, String userName) throws UnknownHostException, IOException {
+		clientSocket = new Socket("localhost", port);
 		id = clients.size() + 1;
 		clients.add(this);
-		this.port = port;
 		this.userName = userName;
 	}
 	
 	public void sendeNachricht(String nachricht) throws UnknownHostException, IOException {
-		Socket clientSocket = new Socket("localhost",port);
 		Scanner scanner = new Scanner(System.in);
-		nachricht = scanner.nextLine();
-		//clientSocket.write(userName + ": " + nachricht);
+		while(clientSocket.isConnected()) {
+			nachricht = scanner.nextLine();
+			String kNachricht = userName + ": " + nachricht;
+			clientSocket.write(kNachricht);
+			nachrichten.add(nachricht);
+		}
 	}
 
 	public int getId() {
@@ -48,6 +52,7 @@ public class Client {
 		String username = scanner.nextLine();
 		Client client = new Client(8002, username);
 		client.getNachricht(client.getId());
-		client.sendeNachricht("Hallo");
+		String nachricht = scanner.nextLine();
+		client.sendeNachricht(scanner.nextLine());
 	}
 }
