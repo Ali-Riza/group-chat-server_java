@@ -1,4 +1,5 @@
 package GroupChat;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,96 +13,104 @@ public class Socket {
 	private java.net.Socket mSocket;
 	private String remoteHostIP;
 	private int remotePort;
-	public BufferedReader inBR;
-	public BufferedWriter outBR;
+	private BufferedReader inBR;
+	private BufferedWriter outBR;
+
 	private PrintWriter out;
-	
-	public Socket(String remoteHostIP, int remotePort){
+
+	public Socket(String remoteHostIP, int remotePort) {
 		this.remoteHostIP = remoteHostIP;
 		this.remotePort = remotePort;
-		
+
 		try {
 			mSocket = new java.net.Socket(remoteHostIP, remotePort);
-			inBR = new BufferedReader(
-			        new InputStreamReader(mSocket.getInputStream()));
+			inBR = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 			out = new PrintWriter(mSocket.getOutputStream(), true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public Socket(java.net.Socket jSocket) throws IOException{
+
+	public BufferedReader getInBR() {
+		return inBR;
+	}
+
+	public BufferedWriter getOutBR() {
+		return outBR;
+	}
+
+	public Socket(java.net.Socket jSocket) throws IOException {
 		mSocket = jSocket;
 
-			inBR = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
-			outBR = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
-			out = new PrintWriter(mSocket.getOutputStream(), true);
-		
-	}
-	
-	public boolean connect() throws UnknownHostException, IOException{
-			mSocket = new java.net.Socket(remoteHostIP, remotePort);
-			return true;
-	}
-	
-	public int dataAvailable() throws IOException{
-			return mSocket.getInputStream().available();
+		inBR = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
+		outBR = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
+		out = new PrintWriter(mSocket.getOutputStream(), true);
+
 	}
 
-	public int read() throws IOException{
-			return inBR.read();
+	public boolean connect() throws UnknownHostException, IOException {
+		mSocket = new java.net.Socket(remoteHostIP, remotePort);
+		return true;
 	}
-	
-	public int read(byte[] b, int len) throws IOException{
+
+	public int dataAvailable() throws IOException {
+		return mSocket.getInputStream().available();
+	}
+
+	public int read() throws IOException {
+		return inBR.read();
+	}
+
+	public int read(byte[] b, int len) throws IOException {
 		char[] cbuf = new char[len];
-			int anzahl = inBR.read(cbuf, 0, len);
-			for(int i = 0; i< b.length ; i++){
-				b[i] = (byte) cbuf[i];
-				
-			}
-			return anzahl;
+		int anzahl = inBR.read(cbuf, 0, len);
+		for (int i = 0; i < b.length; i++) {
+			b[i] = (byte) cbuf[i];
+
+		}
+		return anzahl;
 	}
-	
-	public String readLine() throws IOException{
-		
-			return inBR.readLine();
+
+	public String readLine() throws IOException {
+
+		return inBR.readLine();
 	}
-	
-	public String readLine(int max) throws IOException{
+
+	public String readLine(int max) throws IOException {
 		byte[] bytes = new byte[max];
 		read(bytes, max);
 		return new String(bytes);
 	}
-	
-	public void write(int b){
+
+	public void write(int b) {
 		out.print(b);
 	}
-	
-	public void write(byte[] b, int len){
+
+	public void write(byte[] b, int len) {
 		char[] mChar = new char[b.length];
-		for(int i = 0 ; i < b.length ; i++){
+		for (int i = 0; i < b.length; i++) {
 			mChar[i] = (char) b[i];
 		}
 		out.print(mChar);
-		
+
 	}
-	
-	public void write(String s){
+
+	public void write(String s) {
 		out.println(s);
 	}
-	
-	public void close() throws IOException{
-			mSocket.close();
+
+	public void close() throws IOException {
+		mSocket.close();
 	}
-	
-	public boolean isConnected(){
+
+	public boolean isConnected() {
 		return !mSocket.isClosed();
 	}
-	
-	public void setTimeout(int milliseconds) throws SocketException{
-			mSocket.setSoTimeout(milliseconds);
+
+	public void setTimeout(int milliseconds) throws SocketException {
+		mSocket.setSoTimeout(milliseconds);
 	}
 
 	public String getRemoteHostIP() {
@@ -112,7 +121,7 @@ public class Socket {
 	}
 
 	public String getLocalAddress() {
-		
+
 		return mSocket.getLocalAddress().toString();
 	}
 }
