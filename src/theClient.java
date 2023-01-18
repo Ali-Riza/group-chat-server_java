@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class theClient extends javax.swing.JFrame {
-
+	// test
 	Source OOP = new Source();
 	String username;
 	String address = "localhost";
@@ -18,7 +18,7 @@ public class theClient extends javax.swing.JFrame {
 	PrintWriter theWriter;
 
 	public void ListenThread() {
-		Thread IncomingReader = new Thread(()-> new Message());
+		Thread IncomingReader = new Thread(() -> new Message());
 		IncomingReader.start();
 	}
 
@@ -87,11 +87,11 @@ public class theClient extends javax.swing.JFrame {
 
 		sentMessage.setBackground(new java.awt.Color(240, 240, 240));
 		sentMessage.setColumns(20);
-		sentMessage.setFont(new java.awt.Font("Segoe Script", 1, 11)); 
+		sentMessage.setFont(new java.awt.Font("Segoe Script", 1, 11));
 		sentMessage.setRows(5);
 		jScrollPane1.setViewportView(sentMessage);
 
-		Message.setFont(new java.awt.Font("Segoe Script", 1, 11)); 
+		Message.setFont(new java.awt.Font("Segoe Script", 1, 11));
 		Message.setText("Your messages");
 		Message.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 		Message.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -124,7 +124,7 @@ public class theClient extends javax.swing.JFrame {
 
 		jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-		disConnect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_disconnected_30px_1.png"))); 
+		disConnect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_disconnected_30px_1.png")));
 		disConnect.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				disConnectMouseClicked(evt);
@@ -411,7 +411,7 @@ public class theClient extends javax.swing.JFrame {
 	}
 
 	private void MessageMouseEntered(java.awt.event.MouseEvent evt) {
-	
+
 	}
 
 	private void client_NameMouseExited(java.awt.event.MouseEvent evt) {
@@ -450,7 +450,7 @@ public class theClient extends javax.swing.JFrame {
 	}
 
 	private void MessageKeyReleased(java.awt.event.KeyEvent evt) {
-		
+
 		switch (Message.getText()) {
 		case "":
 			Message.setText("Your messages");
@@ -463,9 +463,9 @@ public class theClient extends javax.swing.JFrame {
 	}
 
 	private void MessageKeyTyped(java.awt.event.KeyEvent evt) {
-		
+
 	}
-	
+
 	public static void main(String args[]) {
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
