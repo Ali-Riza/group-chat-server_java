@@ -1,3 +1,5 @@
+
+// hallo
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -92,7 +94,7 @@ public class theServer extends javax.swing.JFrame {
 		jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
 		dataStored.setColumns(20);
-		dataStored.setFont(new java.awt.Font("Segoe Script", 1, 11)); 
+		dataStored.setFont(new java.awt.Font("Segoe Script", 1, 11));
 		dataStored.setRows(5);
 		dataStored.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		jScrollPane1.setViewportView(dataStored);
@@ -100,7 +102,7 @@ public class theServer extends javax.swing.JFrame {
 		jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
 		jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_start_20px.png"))); 
+		jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_start_20px.png")));
 		jLabel2.setText("Start");
 		jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -127,7 +129,7 @@ public class theServer extends javax.swing.JFrame {
 		jPanel3.setBackground(new java.awt.Color(204, 204, 204));
 
 		jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_stop_20px.png"))); 
+		jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_stop_20px.png")));
 		jLabel3.setText("Stop");
 		jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -154,7 +156,7 @@ public class theServer extends javax.swing.JFrame {
 		jPanel4.setBackground(new java.awt.Color(204, 204, 204));
 
 		jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_user_groups_20px.png"))); 
+		jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_user_groups_20px.png")));
 		jLabel4.setText("Users");
 		jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -181,7 +183,7 @@ public class theServer extends javax.swing.JFrame {
 		jPanel5.setBackground(new java.awt.Color(204, 204, 204));
 
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_broom_20px.png"))); 
+		jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_broom_20px.png")));
 		jLabel5.setText("Clear");
 		jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -206,8 +208,8 @@ public class theServer extends javax.swing.JFrame {
 				.addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE));
 
 		server.setBackground(new java.awt.Color(153, 153, 153));
-		server.setFont(new java.awt.Font("Tahoma", 0, 14)); 
-		server.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_ubuntu_40px.png"))); 
+		server.setFont(new java.awt.Font("Tahoma", 0, 14));
+		server.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/icons8_ubuntu_40px.png")));
 		server.setText("Server");
 
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -320,7 +322,6 @@ public class theServer extends javax.swing.JFrame {
 	private void jLabel5MouseExited(java.awt.event.MouseEvent evt) {
 		OOP.normalColor(jPanel5);
 	}
-
 
 	public static void main(String args[]) {
 
