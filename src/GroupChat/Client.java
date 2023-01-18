@@ -29,7 +29,7 @@ public class Client {
 				socket.getOutBR().flush();
 			}
 		} catch (IOException e) {
-			closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
+			closeEveryThing(socket);
 		}
 	}
 
@@ -44,7 +44,7 @@ public class Client {
 						msgFromGroupChat = socket.getInBR().readLine();
 						System.out.println(msgFromGroupChat);
 					} catch (IOException e) {
-						closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
+						closeEveryThing(socket);
 					}
 
 				}
@@ -52,7 +52,7 @@ public class Client {
 		}).start();
 	}
 
-	public void closeEveryThing(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
+	public void closeEveryThing(Socket socket) {
 		try {
 			if (socket.getInBR() != null) {
 				socket.getInBR().close();
@@ -69,17 +69,13 @@ public class Client {
 	}
 
 	public static void main(String[] args) throws IOException {
-
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.println("Enter your username for the chat groupe ");
-			String username = scanner.nextLine();
-			Socket socket = new Socket("localhost", 1234);
-			Client client = new Client(socket, username);
-			client.ListenForMessage();
-			client.sendMessage();
-		} catch (Exception e) {
-			System.out.println("you are wrong !");
-		}
+		Scanner scanner = new Scanner(System.in);	
+		System.out.println("Enter your username for the chat groupe ");
+		String username = scanner.nextLine();	
+		Socket socket = new Socket("localhost", 8002);
+		Client client = new Client(socket, username);
+		client.ListenForMessage();
+		client.sendMessage();
 	}
 
 }
