@@ -26,7 +26,6 @@ public class Server {
 			try {
 				Socket client = Ss.accept();
 				System.out.println("Client empfangen");
-				client.setTimeout(1000);
 				Thread t = new Thread(() -> handClient(client));
 				t.start();
 			} catch (Exception e) {
