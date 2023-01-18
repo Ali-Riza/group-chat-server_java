@@ -14,7 +14,6 @@ public class Server {
 			}
 		});
 		t.start();
-
 	}
 
 	public void serverLoop() throws IOException {
