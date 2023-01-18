@@ -12,7 +12,7 @@ public class Client {
 	private Socket socket;
 	public BufferedReader bufferedReader;
 	public BufferedWriter bufferedWriter;
-	public String userName;
+	private String userName;
 	
 	public Client(Socket socket, String userName) {
 		try {
