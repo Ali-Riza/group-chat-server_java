@@ -8,17 +8,17 @@ import java.util.ArrayList;
 public class theClient extends javax.swing.JFrame {
 
 	Source OOP = new Source();
-	String username, address = "localhost";
+	String username;
+	String address = "localhost";
 	ArrayList<String> users = new ArrayList();
-
-	Boolean isConnected = false;
+	boolean isConnected = false;
 
 	Socket theSocket;
 	BufferedReader theReader;
 	PrintWriter theWriter;
 
 	public void ListenThread() {
-		Thread IncomingReader = new Thread(new Message());
+		Thread IncomingReader = new Thread(()-> new Message());
 		IncomingReader.start();
 	}
 
@@ -505,10 +505,8 @@ public class theClient extends javax.swing.JFrame {
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTextArea sentMessage;
 
-	// End of variables declaration//GEN-END:variables
 	public class Message implements Runnable {
 
-		@Override
 		public void run() {
 			String[] data;
 			String stream;
