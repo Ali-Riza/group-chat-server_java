@@ -8,13 +8,12 @@ public class Client {
 	
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	private int id;
-	private int port;
 	private ArrayList<String> nachrichten = new ArrayList<String>();
 	private String userName;
 	private Socket clientSocket;
 	
-	public Client(int port, String userName) throws UnknownHostException, IOException {
-		clientSocket = new Socket("localhost", port);
+	public Client(Socket socket, String userName) throws UnknownHostException, IOException {
+		this.clientSocket = socket;
 		id = clients.size() + 1;
 		clients.add(this);
 		this.userName = userName;
@@ -50,7 +49,8 @@ public class Client {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter your username for the chat groupe ");
 		String username = scanner.nextLine();
-		Client client = new Client(8002, username);
+		Socket clientSocket = new Socket("localhost", 8002);
+		Client client = new Client(clientSocket, username);
 		client.getNachricht(client.getId());
 		String nachricht = scanner.nextLine();
 		client.sendeNachricht(scanner.nextLine());

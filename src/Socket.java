@@ -9,8 +9,6 @@ public class Socket {
 	private java.net.Socket mSocket;
 	private String remoteHostIP;
 	private int remotePort;
-	
-	
 	private BufferedReader in;
 	private PrintWriter out;
 	
