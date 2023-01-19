@@ -18,7 +18,7 @@ public class Server {
 		isRunning = true;
 		Thread t = new Thread(() -> {
 			try {
-				runServer();
+				runServerLoop();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -30,7 +30,7 @@ public class Server {
 		isRunning = false;
 	}
 
-	public void runServer() throws IOException {
+	public void runServerLoop() throws IOException {
 		serverSocket = new ServerSocket(port);
 		while (isRunning) {
 			try {
