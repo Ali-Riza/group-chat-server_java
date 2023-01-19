@@ -1,7 +1,5 @@
 package GroupChat;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,7 +31,7 @@ public class Client {
 				socket.getOutBR().flush();
 			}
 		} catch (IOException e) {
-			schliesseAlles(socket, socket.getInBR(), socket.getOutBR());
+			e.printStackTrace();
 		}
 	}
 
@@ -46,27 +44,11 @@ public class Client {
 						nachrichtVomChat = socket.getInBR().readLine();
 						System.out.println(nachrichtVomChat);
 					} catch (IOException e) {
-						schliesseAlles(socket, socket.getInBR(), socket.getOutBR());
+						e.printStackTrace();
 					}
 				}
 			}
 		}).start();
-	}
-
-	public void schliesseAlles(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
-		try {
-			if (bufferedReader != null) {
-				bufferedReader.close();
-			}
-			if (socket.getOutBR() != null) {
-				socket.getOutBR().close();
-			}
-			if (socket != null) {
-				socket.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void main(String[] args) throws IOException {
