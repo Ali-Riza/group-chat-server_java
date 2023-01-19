@@ -35,13 +35,13 @@ public class ServerThread extends Thread {
 		}
 	}
 
-	public void versendeNachrichtAnJeden(String messageToSend) {
+	public void versendeNachrichtAnJeden(String nachricht) {
 		
 		for(int i = 0; i < serverThreads.size(); i++) {
 			ServerThread mServerThread = serverThreads.get(i);
 			try {
 				if (!(mServerThread.clientUserName.equals(clientUserName))) {
-					mServerThread.clientSocket.getOutBR().write(messageToSend);
+					mServerThread.clientSocket.getOutBR().write(nachricht);
 					mServerThread.clientSocket.getOutBR().newLine();
 					mServerThread.clientSocket.getOutBR().flush();
 				}

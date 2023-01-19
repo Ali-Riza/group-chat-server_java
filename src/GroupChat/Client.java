@@ -7,28 +7,28 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Client {
-	private Socket socket;
+	private Socket clientSocket;
 	private String userName;
 
 	public Client(Socket socket, String userName) {
-		this.socket = socket;
+		this.clientSocket = socket;
 		this.userName = userName;
 	}
 
 	public void versendeNachricht() {
 		try {
-			socket.getOutBR().write(userName);
-			socket.getOutBR().newLine();
-			socket.getOutBR().flush();
+			clientSocket.getOutBR().write(userName);
+			clientSocket.getOutBR().newLine();
+			clientSocket.getOutBR().flush();
 			Scanner scanner = new Scanner(System.in);
-			while (socket.isConnected()) {
+			while (clientSocket.isConnected()) {
 				String nachricht = scanner.nextLine();
 				DateFormat df = new SimpleDateFormat("HH:mm");
 				Date dateobj = new Date();
 				String aktuelleUhrzeit = df.format(dateobj);
-				socket.getOutBR().write(userName + " [" + aktuelleUhrzeit + "]: " + nachricht);
-				socket.getOutBR().newLine();
-				socket.getOutBR().flush();
+				clientSocket.getOutBR().write(userName + " [" + aktuelleUhrzeit + "]: " + nachricht);
+				clientSocket.getOutBR().newLine();
+				clientSocket.getOutBR().flush();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -39,9 +39,9 @@ public class Client {
 		Thread clientThread = new Thread(){ 
 			public void run() {
 				String nachrichtVomChat = new String();
-				while (socket.isConnected()) {
+				while (clientSocket.isConnected()) {
 					try {
-						nachrichtVomChat = socket.getInBR().readLine();
+						nachrichtVomChat = clientSocket.getInBR().readLine();
 						System.out.println(nachrichtVomChat);
 					} catch (IOException e) {
 						e.printStackTrace();
