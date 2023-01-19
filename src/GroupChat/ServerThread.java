@@ -5,61 +5,77 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ServerThread extends Thread implements Runnable {
-	public static ArrayList<ServerThread> ServerThreads = new ArrayList<>();
+public class ServerThread extends Thread {
+	
+	public static ArrayList<ServerThread> serverThreads = new ArrayList<ServerThread>();
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
 	private String clientUserName;
-	private Socket cs;
-	private Server s;
+	private Socket clientSocket;
+	private Server server;
 
-	public ServerThread(Socket cs, Server s) {
+	public ServerThread(Socket socket, Server server) {
 		try {
-			this.s = s;
-			this.cs = cs;
-			this.bufferedWriter = cs.getOutBR();
-			this.bufferedReader = cs.getInBR();
+			this.server = server;
+			this.clientSocket = socket;
+			this.bufferedWriter = clientSocket.getOutBR();
+			this.bufferedReader = clientSocket.getInBR();
 			this.clientUserName = bufferedReader.readLine();
-			ServerThreads.add(this);
-			broadcastMessage("SERVER: " + clientUserName + " has entred the chat!");
+			serverThreads.add(this);
+			nachrichtAnJedenVersenden("SERVER: " + clientUserName + " hat den Gruppenchat betreten!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void run() {
-		String messageFromClient;
-		while (cs.isConnected()) {
+		String nachrichtVomClient = new String();
+		while (clientSocket.isConnected()) {
 			try {
-				messageFromClient = bufferedReader.readLine();
-				broadcastMessage(messageFromClient);
+				nachrichtVomClient = bufferedReader.readLine();
+				nachrichtAnJedenVersenden(nachrichtVomClient);
 			} catch (IOException e) {
-				closeEveryThing(cs, bufferedReader, bufferedWriter);
+				allesSchliessen(clientSocket, bufferedReader, bufferedWriter);
 				break;
 			}
 		}
 	}
 
-	public void broadcastMessage(String messageToSend) {
-		for (ServerThread clientHandler : ServerThreads) {
+	public void nachrichtAnJedenVersenden(String nachricht) {
+		
+		for(int i = 0; i < serverThreads.size(); i++) {
+			ServerThread mServerThread = serverThreads.get(i);
 			try {
-				if (!clientHandler.clientUserName.equals(clientUserName)) {
-					clientHandler.bufferedWriter.write(messageToSend);
-					clientHandler.bufferedWriter.newLine();
-					clientHandler.bufferedWriter.flush();
+				if(!(mServerThread.clientUserName.equals(clientUserName))) {
+					mServerThread.bufferedWriter.write(nachricht);
+					mServerThread.bufferedWriter.newLine();;
+					mServerThread.bufferedWriter.flush();
 				}
 			} catch (IOException e) {
-				closeEveryThing(cs, bufferedReader, bufferedWriter);
+				allesSchliessen(clientSocket, bufferedReader, bufferedWriter);
 			}
 		}
+		
+//		for (ServerThread clientHandler : ServerThreads) {
+//			
+//			try {
+//				if (!clientHandler.clientUserName.equals(clientUserName)) {
+//					clientHandler.bufferedWriter.write(nachricht);
+//					clientHandler.bufferedWriter.newLine();
+//					clientHandler.bufferedWriter.flush();
+//				}
+//			} catch (IOException e) {
+//				allesSchliessen(clientSocket, bufferedReader, bufferedWriter);
+//			}
+//		}
 	}
 
 	public void removeClientHandler() {
-		ServerThreads.remove(this);
-		broadcastMessage("Server: " + clientUserName + "has left the chat");
+		serverThreads.remove(this);
+		nachrichtAnJedenVersenden("Server: " + clientUserName + " hat den Gruppenchat verlassen.");
 	}
 
-	public void closeEveryThing(Socket cs, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
+	public void allesSchliessen(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
 		try {
 			if (bufferedReader != null) {
 				bufferedReader.close();
@@ -67,12 +83,11 @@ public class ServerThread extends Thread implements Runnable {
 			if (bufferedWriter != null) {
 				bufferedWriter.close();
 			}
-			if (cs != null) {
-				cs.close();
+			if (socket != null) {
+				socket.close();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 }
