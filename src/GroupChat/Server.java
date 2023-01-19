@@ -1,62 +1,49 @@
 package GroupChat;
+
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server {
-	
-	private int port;
-	private boolean isRunning = false;
+
 	private ServerSocket serverSocket;
 
-	public Server() {
-		
+	public Server(ServerSocket serversocket) {
+		this.serverSocket = serversocket;
+
 	}
-	
-	public void startServer(int port) {
-		this.port = port;
-		isRunning = true;
-		Thread serverThread = new Thread(()-> {
-			try {
-				serverLoop();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-		serverThread.start();
-	}
-	
-	public void stoppServer() {
-		isRunning = false;
+
+	public void satrtServer() {
+
 		try {
-			serverSocket.close();
+
+			while (!serverSocket.isClosed()) {
+				Socket socket = serverSocket.accept();
+				System.out.println("A new client has connected ");
+				ClientHandler clientHandler = new ClientHandler(socket);
+				Thread thread = new Thread(clientHandler);
+				thread.start();
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
+		}
+	}
+
+	public void closeServerSocket() {
+		try {
+			if (serverSocket != null) {
+				serverSocket.close();
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void serverLoop() throws IOException {
-		serverSocket = new ServerSocket(port);
-		System.out.println("Server gestartet");
-		
-		while(isRunning) {
-			System.out.println("Warte auf Client");
-			try {
-				Socket clientSocket = serverSocket.accept();
-				System.out.println("Ein neuer Client hat sich verbunden");
-				ClientHandler clientHandler = new ClientHandler(clientSocket); 
-				Thread thread = new Thread(clientHandler);
-				thread.start();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	public static void main(String[] args) throws IOException {
 
-		}
-	}
-	
-	public static void main(String [] args) {
-		Server s = new Server();
-		s.startServer(8002);
+		ServerSocket serverSocket = new ServerSocket(1234);
+		Server server = new Server(serverSocket);
+		server.satrtServer();
 	}
 
 }
