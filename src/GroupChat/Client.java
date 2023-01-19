@@ -14,44 +14,40 @@ public class Client {
 		this.userName = userName;
 	}
 
-	public void sendMessage() {
+	public void versendeNachricht() {
 		try {
 			socket.getOutBR().write(userName);
 			socket.getOutBR().newLine();
 			socket.getOutBR().flush();
-
 			Scanner scanner = new Scanner(System.in);
 			while (socket.isConnected()) {
-				String messageToSend = scanner.nextLine();
-				socket.getOutBR().write(userName + ": " + messageToSend);
+				String nachricht = scanner.nextLine();
+				socket.getOutBR().write(userName + ": " + nachricht);
 				socket.getOutBR().newLine();
 				socket.getOutBR().flush();
 			}
 		} catch (IOException e) {
-			closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
+			allesSchliessen(socket, socket.getInBR(), socket.getOutBR());
 		}
 	}
 
-	public void ListenForMessage() {
+	public void leseNachrichten() {
 		new Thread(new Runnable() {
-			@Override
 			public void run() {
-				String msgFromGroupChat;
-
+				String nachrichtVomChat = new String();
 				while (socket.isConnected()) {
 					try {
-						msgFromGroupChat = socket.getInBR().readLine();
-						System.out.println(msgFromGroupChat);
+						nachrichtVomChat = socket.getInBR().readLine();
+						System.out.println(nachrichtVomChat);
 					} catch (IOException e) {
-						closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
+						allesSchliessen(socket, socket.getInBR(), socket.getOutBR());
 					}
-
 				}
 			}
 		}).start();
 	}
 
-	public void closeEveryThing(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
+	public void allesSchliessen(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
 		try {
 			if (bufferedReader != null) {
 				bufferedReader.close();
@@ -68,17 +64,16 @@ public class Client {
 	}
 
 	public static void main(String[] args) throws IOException {
-
-		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.println("Enter your username for the chat groupe ");
+		try {
+			System.out.println("Bitte gebe deinen Usernamen ein!");
+			Scanner scanner = new Scanner(System.in);
 			String username = scanner.nextLine();
 			Socket socket = new Socket("localhost", 8002);
 			Client client = new Client(socket, username);
-			client.ListenForMessage();
-			client.sendMessage();
+			client.leseNachrichten();
+			client.versendeNachricht();
 		} catch (Exception e) {
-			System.out.println("you are wrong !");
+			System.out.println("Das funktioniert nicht");
 		}
 	}
-
 }
