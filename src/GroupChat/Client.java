@@ -3,43 +3,32 @@ package GroupChat;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
 	private Socket socket;
-	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
 	private String userName;
 
 	public Client(Socket socket, String userName) {
-		try {
-			this.socket = socket;
-			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.userName = userName;
-		} catch (IOException e) {
-			closeEveryThing(socket, bufferedReader, bufferedWriter);
-		}
+		this.socket = socket;
+		this.userName = userName;
 	}
 
 	public void sendMessage() {
 		try {
-			bufferedWriter.write(userName);
-			bufferedWriter.newLine();
-			bufferedWriter.flush();
+			socket.getOutBR().write(userName);
+			socket.getOutBR().newLine();
+			socket.getOutBR().flush();
 
 			Scanner scanner = new Scanner(System.in);
 			while (socket.isConnected()) {
 				String messageToSend = scanner.nextLine();
-				bufferedWriter.write(userName + ": " + messageToSend);
-				bufferedWriter.newLine();
-				bufferedWriter.flush();
+				socket.getOutBR().write(userName + ": " + messageToSend);
+				socket.getOutBR().newLine();
+				socket.getOutBR().flush();
 			}
 		} catch (IOException e) {
-			closeEveryThing(socket, bufferedReader, bufferedWriter);
+			closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
 		}
 	}
 
@@ -51,10 +40,10 @@ public class Client {
 
 				while (socket.isConnected()) {
 					try {
-						msgFromGroupChat = bufferedReader.readLine();
+						msgFromGroupChat = socket.getInBR().readLine();
 						System.out.println(msgFromGroupChat);
 					} catch (IOException e) {
-						closeEveryThing(socket, bufferedReader, bufferedWriter);
+						closeEveryThing(socket, socket.getInBR(), socket.getOutBR());
 					}
 
 				}
@@ -67,8 +56,8 @@ public class Client {
 			if (bufferedReader != null) {
 				bufferedReader.close();
 			}
-			if (bufferedWriter != null) {
-				bufferedWriter.close();
+			if (socket.getOutBR() != null) {
+				socket.getOutBR().close();
 			}
 			if (socket != null) {
 				socket.close();

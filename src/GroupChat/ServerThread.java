@@ -5,10 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ServerThread extends Thread implements Runnable {
+public class ServerThread extends Thread {
 	public static ArrayList<ServerThread> ServerThreads = new ArrayList<>();
-	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
 	private String clientUserName;
 	private Socket cs;
 	private Server s;
@@ -17,9 +15,7 @@ public class ServerThread extends Thread implements Runnable {
 		try {
 			this.s = s;
 			this.cs = cs;
-			this.bufferedWriter = cs.getOutBR();
-			this.bufferedReader = cs.getInBR();
-			this.clientUserName = bufferedReader.readLine();
+			this.clientUserName = cs.getInBR().readLine();
 			ServerThreads.add(this);
 			broadcastMessage("SERVER: " + clientUserName + " has entred the chat!");
 		} catch (IOException e) {
@@ -31,10 +27,10 @@ public class ServerThread extends Thread implements Runnable {
 		String messageFromClient;
 		while (cs.isConnected()) {
 			try {
-				messageFromClient = bufferedReader.readLine();
+				messageFromClient = cs.getInBR().readLine();
 				broadcastMessage(messageFromClient);
 			} catch (IOException e) {
-				closeEveryThing(cs, bufferedReader, bufferedWriter);
+				closeEveryThing(cs, cs.getInBR(), cs.getOutBR());
 				break;
 			}
 		}
@@ -44,12 +40,12 @@ public class ServerThread extends Thread implements Runnable {
 		for (ServerThread clientHandler : ServerThreads) {
 			try {
 				if (!clientHandler.clientUserName.equals(clientUserName)) {
-					clientHandler.bufferedWriter.write(messageToSend);
-					clientHandler.bufferedWriter.newLine();
-					clientHandler.bufferedWriter.flush();
+					clientHandler.cs.getOutBR().write(messageToSend);
+					clientHandler.cs.getOutBR().newLine();
+					clientHandler.cs.getOutBR().flush();
 				}
 			} catch (IOException e) {
-				closeEveryThing(cs, bufferedReader, bufferedWriter);
+				closeEveryThing(cs, cs.getInBR(), cs.getOutBR());
 			}
 		}
 	}
@@ -64,8 +60,8 @@ public class ServerThread extends Thread implements Runnable {
 			if (bufferedReader != null) {
 				bufferedReader.close();
 			}
-			if (bufferedWriter != null) {
-				bufferedWriter.close();
+			if (cs.getOutBR() != null) {
+				cs.getOutBR().close();
 			}
 			if (cs != null) {
 				cs.close();
