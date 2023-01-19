@@ -6,75 +6,69 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ServerThread extends Thread {
-	
-	public static ArrayList<ServerThread> serverThreads = new ArrayList<ServerThread>();
-	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
+	public static ArrayList<ServerThread> ServerThreads = new ArrayList<>();
 	private String clientUserName;
-	private Socket clientSocket;
-	private Server server;
+	private Socket cs;
+	private Server s;
 
-	public ServerThread(Socket socket, Server server) {
+	public ServerThread(Socket cs, Server s) {
 		try {
-			this.server = server;
-			this.clientSocket = socket;
-			this.bufferedWriter = clientSocket.getOutBR();
-			this.bufferedReader = clientSocket.getInBR();
-			this.clientUserName = bufferedReader.readLine();
-			serverThreads.add(this);
-			nachrichtAnJedenVersenden("SERVER: " + clientUserName + " hat den Gruppenchat betreten!");
+			this.s = s;
+			this.cs = cs;
+			this.clientUserName = cs.getInBR().readLine();
+			ServerThreads.add(this);
+			broadcastMessage("SERVER: " + clientUserName + " has entred the chat!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void run() {
-		String nachrichtVomClient = new String();
-		while (clientSocket.isConnected()) {
+		String messageFromClient;
+		while (cs.isConnected()) {
 			try {
-				nachrichtVomClient = bufferedReader.readLine();
-				nachrichtAnJedenVersenden(nachrichtVomClient);
+				messageFromClient = cs.getInBR().readLine();
+				broadcastMessage(messageFromClient);
 			} catch (IOException e) {
-				allesSchliessen(clientSocket, bufferedReader, bufferedWriter);
+				closeEveryThing(cs, cs.getInBR(), cs.getOutBR());
 				break;
 			}
 		}
 	}
 
-	public void nachrichtAnJedenVersenden(String nachricht) {
-		
-		for(int i = 0; i < serverThreads.size(); i++) {
-			ServerThread mServerThread = serverThreads.get(i);
+	public void broadcastMessage(String messageToSend) {
+		for (ServerThread clientHandler : ServerThreads) {
 			try {
-				if(!(mServerThread.clientUserName.equals(clientUserName))) {
-					mServerThread.bufferedWriter.write(nachricht);
-					mServerThread.bufferedWriter.newLine();;
-					mServerThread.bufferedWriter.flush();
+				if (!clientHandler.clientUserName.equals(clientUserName)) {
+					clientHandler.cs.getOutBR().write(messageToSend);
+					clientHandler.cs.getOutBR().newLine();
+					clientHandler.cs.getOutBR().flush();
 				}
 			} catch (IOException e) {
-				allesSchliessen(clientSocket, bufferedReader, bufferedWriter);
+				closeEveryThing(cs, cs.getInBR(), cs.getOutBR());
 			}
 		}
 	}
 
 	public void removeClientHandler() {
-		serverThreads.remove(this);
-		nachrichtAnJedenVersenden("Server: " + clientUserName + " hat den Gruppenchat verlassen.");
+		ServerThreads.remove(this);
+		broadcastMessage("Server: " + clientUserName + "has left the chat");
 	}
 
-	public void allesSchliessen(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
+	public void closeEveryThing(Socket cs, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
 		try {
 			if (bufferedReader != null) {
 				bufferedReader.close();
 			}
-			if (bufferedWriter != null) {
-				bufferedWriter.close();
+			if (cs.getOutBR() != null) {
+				cs.getOutBR().close();
 			}
-			if (socket != null) {
-				socket.close();
+			if (cs != null) {
+				cs.close();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 }
