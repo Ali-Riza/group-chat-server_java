@@ -26,24 +26,14 @@ public class Server {
 				Thread thread = new Thread(clientHandler);
 				thread.start();
 			} catch (IOException e) {
-
+				e.printStackTrace();
 			}
-		}
-	}
-
-	public void closeServerSocket() {
-		try {
-			if (serverSocket != null) {
-				serverSocket.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) throws IOException {
 
-		Server server = new Server(serverSocket);
+		Server server = new Server();
 		server.startServer();
 	}
 }
