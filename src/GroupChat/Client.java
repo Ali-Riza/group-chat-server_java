@@ -33,7 +33,7 @@ public class Client {
 				socket.getOutBR().flush();
 			}
 		} catch (IOException e) {
-			allesSchliessen(socket, socket.getInBR(), socket.getOutBR());
+			schliesseAlles(socket, socket.getInBR(), socket.getOutBR());
 		}
 	}
 
@@ -46,14 +46,14 @@ public class Client {
 						nachrichtVomChat = socket.getInBR().readLine();
 						System.out.println(nachrichtVomChat);
 					} catch (IOException e) {
-						allesSchliessen(socket, socket.getInBR(), socket.getOutBR());
+						schliesseAlles(socket, socket.getInBR(), socket.getOutBR());
 					}
 				}
 			}
 		}).start();
 	}
 
-	public void allesSchliessen(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
+	public void schliesseAlles(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
 		try {
 			if (bufferedReader != null) {
 				bufferedReader.close();
