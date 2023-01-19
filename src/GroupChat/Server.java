@@ -15,12 +15,11 @@ public class Server {
 
 	public void startServer(int port) {
 		this.port = port;
-		isRunning = false;
+		isRunning = true;
 		Thread t = new Thread(() -> {
 			try {
 				runServer();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
@@ -35,9 +34,9 @@ public class Server {
 		serverSocket = new ServerSocket(port);
 		while (isRunning) {
 			try {
-				Socket socket = serverSocket.accept();
-				System.out.println("A new client has connected ");
-				ClientHandler clientHandler = new ClientHandler(socket);
+				Socket clientSocket = serverSocket.accept();
+				System.out.println("Ein neuer Client hat sich verbunden");
+				ClientHandler clientHandler = new ClientHandler(clientSocket);
 				Thread thread = new Thread(clientHandler);
 				thread.start();
 			} catch (IOException e) {

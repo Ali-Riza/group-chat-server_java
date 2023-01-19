@@ -83,7 +83,7 @@ public class Client {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Enter your username for the chat groupe ");
 			String username = scanner.nextLine();
-			Socket socket = new Socket("localhost", 1234);
+			Socket socket = new Socket("localhost", 8002);
 			Client client = new Client(socket, username);
 			client.ListenForMessage();
 			client.sendMessage();
