@@ -36,7 +36,7 @@ public class Client {
 	}
 
 	public void leseNachrichten() {
-		new Thread(new Runnable() {
+		Thread clientThread = new Thread(){ 
 			public void run() {
 				String nachrichtVomChat = new String();
 				while (socket.isConnected()) {
@@ -48,7 +48,8 @@ public class Client {
 					}
 				}
 			}
-		}).start();
+		};
+		clientThread.start();
 	}
 
 	public static void main(String[] args) throws IOException {
