@@ -32,7 +32,7 @@ public class ServerThread extends Thread {
 					clientSocket.getOutBR().write("hallöchen");
 					clientSocket.getOutBR().newLine();
 					clientSocket.getOutBR().flush();
-				}
+				} // Wer ist onlne
 
 			} catch (IOException e) {
 				e.printStackTrace();
