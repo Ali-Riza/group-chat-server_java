@@ -1,7 +1,5 @@
 package GroupChat;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -31,7 +29,7 @@ public class ServerThread extends Thread {
 				nachrichtVomClient = clientSocket.getInBR().readLine();
 				versendeNachrichtAnJeden(nachrichtVomClient);
 			} catch (IOException e) {
-				schliesseAlles(clientSocket, clientSocket.getInBR(), clientSocket.getOutBR());
+				e.printStackTrace();
 				break;
 			}
 		}
@@ -48,7 +46,7 @@ public class ServerThread extends Thread {
 					mServerThread.clientSocket.getOutBR().flush();
 				}
 			} catch (IOException e) {
-				schliesseAlles(clientSocket, clientSocket.getInBR(), clientSocket.getOutBR());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -56,21 +54,5 @@ public class ServerThread extends Thread {
 	public void entferneClient() {
 		serverThreads.remove(this);
 		versendeNachrichtAnJeden("Server: " + clientUserName + " hat den Gruppenchat verlassen.");
-	}
-
-	public void schliesseAlles(Socket socket, BufferedReader bufferedReader, BufferedWriter buffredWriter) {
-		try {
-			if (bufferedReader != null) {
-				bufferedReader.close();
-			}
-			if (buffredWriter != null) {
-				buffredWriter.close();
-			}
-			if (socket != null) {
-				socket.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
