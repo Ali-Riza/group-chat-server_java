@@ -3,9 +3,6 @@ package GroupChat;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable {
@@ -17,16 +14,12 @@ public class ClientHandler implements Runnable {
 	private String clientUserName;
 
 	public ClientHandler(Socket socket) {
-		try {
-			this.socket = socket;
-			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.clientUserName = bufferedReader.readLine();
-			ClientHandlers.add(this);
-			broadcastMessage("SERVER: " + clientUserName + " has entred the chat!");
-		} catch (IOException e) {
-			closeEveryThing(socket, bufferedReader, bufferedWriter);
-		}
+		this.socket = socket;
+//			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		this.bufferedReader = socket.getInBR();
+//			this.clientUserName = bufferedReader.readLine();
+//			ClientHandlers.add(this);
+		broadcastMessage("SERVER: " + clientUserName + " has entred the chat!");
 	}
 
 	@Override

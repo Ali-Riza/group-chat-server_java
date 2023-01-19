@@ -1,8 +1,10 @@
 package GroupChat;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -12,7 +14,8 @@ public class Socket {
 	private java.net.Socket mSocket;
 	private String remoteHostIP;
 	private int remotePort;
-	private BufferedReader in;
+	private BufferedReader inBr;
+	private BufferedWriter outBr;
 	private PrintWriter out;
 	
 	public Socket(String remoteHostIP, int remotePort){
@@ -20,7 +23,8 @@ public class Socket {
 		this.remotePort = remotePort;
 		try {
 			mSocket = new java.net.Socket(remoteHostIP, remotePort);
-			in = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
+			inBr = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
+			outBr = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
 			out = new PrintWriter(mSocket.getOutputStream(), true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -29,8 +33,17 @@ public class Socket {
 	
 	public Socket(java.net.Socket jSocket) throws IOException{
 		mSocket = jSocket;
-		in = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
+		inBr = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
+		outBr = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
 		out = new PrintWriter(mSocket.getOutputStream(), true);
+	}
+	
+	public BufferedReader getInBR() {
+		return inBr;
+	}
+	
+	public BufferedWriter getOutBR() {
+		return outBr;
 	}
 	
 	public boolean connect() throws UnknownHostException, IOException{
@@ -43,12 +56,12 @@ public class Socket {
 	}
 
 	public int read() throws IOException{
-		return in.read();
+		return inBr.read();
 	}
 	
 	public int read(byte[] b, int len) throws IOException{
 		char[] cbuf = new char[len];
-		int anzahl = in.read(cbuf, 0, len);
+		int anzahl = inBr.read(cbuf, 0, len);
 		for(int i = 0; i< b.length ; i++){
 			b[i] = (byte) cbuf[i];
 				
@@ -57,7 +70,7 @@ public class Socket {
 	}
 	
 	public String readLine() throws IOException{	
-		return in.readLine();
+		return inBr.readLine();
 	}
 	
 	public String readLine(int max) throws IOException{
