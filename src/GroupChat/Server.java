@@ -25,7 +25,7 @@ public class Server {
 		});
 		t.start();
 	}
-	
+
 	public void stopServer() {
 		isRunning = false;
 	}
@@ -36,8 +36,7 @@ public class Server {
 			try {
 				Socket clientSocket = serverSocket.accept();
 				System.out.println("Ein neuer Client hat sich verbunden");
-				ClientHandler clientHandler = new ClientHandler(clientSocket);
-				Thread thread = new Thread(clientHandler);
+				Thread thread = new ServerThread(clientSocket, this);
 				thread.start();
 			} catch (IOException e) {
 				e.printStackTrace();
