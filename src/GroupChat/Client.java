@@ -3,6 +3,9 @@ package GroupChat;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Client {
@@ -22,7 +25,10 @@ public class Client {
 			Scanner scanner = new Scanner(System.in);
 			while (socket.isConnected()) {
 				String nachricht = scanner.nextLine();
-				socket.getOutBR().write(userName + ": " + nachricht);
+				DateFormat df = new SimpleDateFormat("HH:mm");
+				Date dateobj = new Date();
+				String aktuelleUhrzeit = df.format(dateobj);
+				socket.getOutBR().write(userName + " [" + aktuelleUhrzeit + "]: " + nachricht);
 				socket.getOutBR().newLine();
 				socket.getOutBR().flush();
 			}
