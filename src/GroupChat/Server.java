@@ -24,6 +24,7 @@ public class Server {
 				thread.start();
 			}
 		} catch (IOException e) {
+			
 		}
 	}
 
@@ -42,5 +43,4 @@ public class Server {
 		Server server = new Server(serverSocket);
 		server.startServer();
 	}
-
 }
