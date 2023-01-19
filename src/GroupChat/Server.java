@@ -6,23 +6,28 @@ public class Server {
 
 	private ServerSocket serverSocket;
 
-	public Server(ServerSocket serversocket) {
-		this.serverSocket = serversocket;
+	public Server() {
+		serverSocket = null;
+	}
+
+	public void start() throws IOException {
+		ServerSocket serverSocket = new ServerSocket(8002);
+		Thread t = new Thread(() -> startServer());
+		t.start();
 	}
 
 	public void startServer() {
 
-		try {
-
-			while (!serverSocket.isClosed()) {
+		while (true) {
+			try {
 				Socket socket = serverSocket.accept();
 				System.out.println("A new client has connected ");
 				ClientHandler clientHandler = new ClientHandler(socket);
 				Thread thread = new Thread(clientHandler);
 				thread.start();
+			} catch (IOException e) {
+
 			}
-		} catch (IOException e) {
-			
 		}
 	}
 
@@ -37,7 +42,7 @@ public class Server {
 	}
 
 	public static void main(String[] args) throws IOException {
-		ServerSocket serverSocket = new ServerSocket(8002);
+
 		Server server = new Server(serverSocket);
 		server.startServer();
 	}
